@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tetris</title>
+<style type="text/css">
+	#container{
+		width : 350px; 
+		height : 500px;
+		border : 1px solid #000000;
+	}
+	#figureStandBy {
+		left : 400px;
+		top : 100px;
+		width : 100px; 
+		height : 100px;
+		border : 1px solid #000000;
+	}
+</style>
+<script type="text/javascript">
+var CONTAINER = [
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0]
+];
+var FIGURE = [
+	[ 
+		[
+			[0,0,0,0],
+			[0,1,0,0],
+			[0,1,0,0],
+			[0,1,1,0]
+		],
+		[
+			[0,0,0,0],
+			[1,1,1,0],
+			[1,0,0,0],
+			[0,0,0,0]
+		],
+		[
+			[0,1,1,0],
+			[0,0,1,0],
+			[0,0,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,0,0,1],
+			[0,1,1,1],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,1,1,0],
+			[0,1,0,0],
+			[0,1,0,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,1],
+			[0,0,0,1],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,0,1,0],
+			[0,0,1,0],
+			[0,1,1,0]
+		],
+		[
+			[0,0,0,0],
+			[1,0,0,0],
+			[1,1,1,0],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,1,0,0],
+			[0,1,1,0],
+			[0,1,0,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,1],
+			[0,0,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,0,1,0],
+			[0,1,1,0],
+			[0,0,1,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,0,0],
+			[1,1,1,0],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[0,1,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[0,1,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[0,1,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[0,1,1,0],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,1,0,0],
+			[0,1,1,0],
+			[0,0,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,0,1,1],
+			[0,1,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,0,0],
+			[0,1,1,0],
+			[0,0,1,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[1,1,0,0],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,0,0,0],
+			[0,0,1,0],
+			[0,1,1,0],
+			[0,1,0,0]
+		],
+		[
+			[0,0,0,0],
+			[1,1,0,0],
+			[0,1,1,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,1,0],
+			[0,1,1,0],
+			[0,1,0,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,0,0],
+			[0,1,1,0],
+			[0,0,1,1],
+			[0,0,0,0]
+		]
+	],
+	[ 
+		[
+			[0,0,0,0],
+			[1,1,1,1],
+			[0,0,0,0],
+			[0,0,0,0]
+		],
+		[
+			[0,0,1,0],
+			[0,0,1,0],
+			[0,0,1,0],
+			[0,0,1,0]
+		],
+		[
+			[0,0,0,0],
+			[0,0,0,0],
+			[1,1,1,1],
+			[0,0,0,0]
+		],
+		[
+			[0,1,0,0],
+			[0,1,0,0],
+			[0,1,0,0],
+			[0,1,0,0]
+		]
+	]
+];
+
+/* var FIGURE2 = [ 
+	[ 0x4640, 0x0E40, 0x4C40, 0x4E00 ], // 'T' 
+	[ 0x8C40, 0x6C00, 0x8C40, 0x6C00 ], // 'S' 
+	[ 0x4C80, 0xC600, 0x4C80, 0xC600 ], // 'Z' 
+	[ 0x4444, 0x0F00, 0x4444, 0x0F00 ], // 'I' 
+	[ 0x44C0, 0x8E00, 0xC880, 0xE200 ], // 'J' 
+	[ 0x88C0, 0xE800, 0xC440, 0x2E00 ], // 'L' 
+	[ 0xCC00, 0xCC00, 0xCC00, 0xCC00 ]  // 'O' 
+]; */
+var FIGURE_CONTAINER_LOCATION = {
+	old_x : 6,
+	old_y : 0,
+	x : 6,
+	y : 0,
+	bottom : 0
+};
+var FIGURE_LOCATION = {
+	old_x : 0,
+	old_y : 0,
+	x : 0,
+	y : 0
+}
+
+var init = function(){
+	draw();	
+	choice_figure();
+	figure_event();
+}
+var choice_figure = function(){
+	get_random_figure();
+	generate_figure();
+}
+var get_random_figure = function(){
+	FIGURE_LOCATION.x = Math.floor(Math.random() * FIGURE.length);
+}
+var generate_figure = function(){
+	move_figure();
+}
+var figure_event = function(){
+	window.addEventListener("keydown", function(event){
+		if ( event.key == "ArrowUp"){
+			FIGURE_LOCATION.y++;
+			if (FIGURE_LOCATION.y == 4)
+				FIGURE_LOCATION.y = 0;
+			move_figure();
+		} else if ( event.key == "ArrowLeft"){
+			FIGURE_CONTAINER_LOCATION.x--;
+			move_figure();
+		} else if ( event.key == "ArrowRight"){
+			FIGURE_CONTAINER_LOCATION.x++;
+			move_figure();
+		}
+		
+		console.log(event.key);
+	});
+	setInterval(drop_figure, 300);
+}
+var drop_figure = function(){
+	FIGURE_CONTAINER_LOCATION.y++;
+	FIGURE_CONTAINER_LOCATION.bottom++;
+	if (FIGURE_CONTAINER_LOCATION.bottom == 13) {
+		FIGURE_CONTAINER_LOCATION = {
+			old_x : 6,
+			old_y : 0,
+			x : 6,
+			y : 0,
+			bottom : 0
+		};
+		FIGURE_LOCATION = {
+			old_x : 0,
+			old_y : 0,
+			x : 0,
+			y : 0
+		}
+		choice_figure();
+	} else {
+		move_figure();
+	}
+		
+}
+var move_figure = function(){
+	var container = document.getElementById("container");
+	var context = container.getContext('2d');
+	var figure = FIGURE[FIGURE_LOCATION.x][FIGURE_LOCATION.y];
+	var old_figure = FIGURE[FIGURE_LOCATION.old_x][FIGURE_LOCATION.old_y];
+	var fcl = FIGURE_CONTAINER_LOCATION;
+	
+	context.fillStyle = 'white'; 
+	context.fillRect(0, 0, 100, 100); 
+	context.fillStyle = 'blue'; 
+	for (var y = 0; y < 4; y++) { 
+		for (var x = 0; x < 4; x++) { 
+			if (old_figure[y][x] == 1) { 
+				context.clearRect((20 * fcl.old_x-1) + (x * 20), (10 * fcl.old_y-1) + (y * 10), 19, 9); 
+			} 
+		} 
+	}
+	for (var y = 0; y < 4; y++) { 
+		for (var x = 0; x < 4; x++) { 
+			if (figure[y][x] == 1) { 
+				context.fillRect((20 * fcl.x-1) + (x * 20), (10 * fcl.y-1) + (y * 10), 19, 9); 
+			} 
+		} 
+	}
+	FIGURE_LOCATION.old_x = FIGURE_LOCATION.x;
+	FIGURE_LOCATION.old_y = FIGURE_LOCATION.y;
+	FIGURE_CONTAINER_LOCATION.old_x = FIGURE_CONTAINER_LOCATION.x;
+	FIGURE_CONTAINER_LOCATION.old_y = FIGURE_CONTAINER_LOCATION.y;
+}
+var draw = function(){
+	var context = container.getContext("2d");
+	var rectangle = new Path2D();
+    rectangle.rect(10, 10, 50, 50);
+	context.stroke(rectangle);
+}
+window.onload = function(){
+	init();
+}
+
+</script>
+</head>
+<body>
+<canvas id="container" >
+</canvas>
+<canvas id="figureStandBy" >
+</canvas>
+</body>
+<!-- <body onload="tetris_run(document.body)">
+</body> -->
+</html>
